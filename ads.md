@@ -588,4 +588,96 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 }
 ```
 
+### load native theo cơ chế mới
+class AdsNativeConfig {
+    companion object {
+        var mNativeAdHome: NativeAd? = null
+        fun loadNativeHome(context: Context, callback: NativeCallback?, strIdAds: String){
+            if(mNativeAdHome != null) return;
+
+            if(Common.isNetworkAvailable(context)){
+                if(callback != null){
+                    Admob.getInstance().loadNativeAd(context, strIdAds, callback)
+                } else {
+                    Admob.getInstance().loadNativeAd(context, strIdAds, object : NativeCallback() {
+                        override fun onNativeAdLoaded(nativeAd: NativeAd?) {
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onNativeAdLoaded");
+                            mNativeAdHome = nativeAd
+                        }
+                        override fun onAdFailedToLoad() {
+                            super.onAdFailedToLoad()
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onAdFailedToLoad");
+                            mNativeAdHome = null;
+                        }
+                        override fun onAdImpression() {
+                            super.onAdImpression()
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onAdImpression");
+                            mNativeAdHome = null
+                            loadNativeHome(context, null, strIdAds)
+                        }
+                    })
+                }
+            }
+        }
+
+        var mNativeAdAll: NativeAd? = null
+        fun loadNativeAll(context: Context, callback: NativeCallback?){
+            if(mNativeAdAll != null) return;
+
+            if(Common.isNetworkAvailable(context)){
+                if(callback != null){
+                    Admob.getInstance().loadNativeAd(context, context.getString(R.string.native_all), callback)
+                } else {
+                    Admob.getInstance().loadNativeAd(context, context.getString(R.string.native_all), object : NativeCallback() {
+                        override fun onNativeAdLoaded(nativeAd: NativeAd?) {
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onNativeAdLoaded");
+                            mNativeAdAll = nativeAd
+                        }
+                        override fun onAdFailedToLoad() {
+                            super.onAdFailedToLoad()
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onAdFailedToLoad");
+                            mNativeAdAll = null;
+                        }
+                        override fun onAdImpression() {
+                            super.onAdImpression()
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onAdImpression");
+                            mNativeAdAll = null
+                            loadNativeAll(context, null)
+                        }
+                    })
+                }
+            }
+        }
+        
+        var mNativeAdItem: NativeAd? = null
+        fun loadNativeItem(context: Context, callback: NativeCallback?, strIdAds: String){
+            if(mNativeAdItem != null) return;
+
+            if(Common.isNetworkAvailable(context)){
+                if(callback != null){
+                    Admob.getInstance().loadNativeAd(context, strIdAds, callback)
+                } else {
+                    Admob.getInstance().loadNativeAd(context, strIdAds, object : NativeCallback() {
+                        override fun onNativeAdLoaded(nativeAd: NativeAd?) {
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onNativeAdLoaded");
+                            mNativeAdItem = nativeAd
+                        }
+                        override fun onAdFailedToLoad() {
+                            super.onAdFailedToLoad()
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onAdFailedToLoad");
+                            mNativeAdItem = null;
+                        }
+                        override fun onAdImpression() {
+                            super.onAdImpression()
+                            Log.d("iiiAdsNativeConfig", "loadNativeAll#onAdImpression");
+                            mNativeAdItem = null
+                            loadNativeItem(context, null, strIdAds)
+                        }
+                    })
+                }
+            }
+        }
+    }
+}
+
   
